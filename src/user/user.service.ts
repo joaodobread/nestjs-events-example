@@ -3,16 +3,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './repositories/user.repository';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly eventEmitter: EventEmitter2,
+
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
   ) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
     this.userRepository.save(user);
+    this.eventEmitter.emit('user.created', {
+      email: user.email,
+      name: user.name,
+    });
+
     return user;
   }
 
@@ -33,7 +41,12 @@ export class UserService {
     return user;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    this.eventEmitter.emit('user.created', {
+      email: user.email,
+      name: user.name,
+    });
     return this.userRepository.delete({ id });
   }
 }
