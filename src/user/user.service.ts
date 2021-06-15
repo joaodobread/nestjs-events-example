@@ -28,8 +28,10 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne({ id });
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) throw new NotFoundException();
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -43,7 +45,7 @@ export class UserService {
 
   async remove(id: number) {
     const user = await this.findOne(id);
-    this.eventEmitter.emit('user.created', {
+    this.eventEmitter.emit('user.deleted', {
       email: user.email,
       name: user.name,
     });
