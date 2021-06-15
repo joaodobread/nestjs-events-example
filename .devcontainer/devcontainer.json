@@ -1,0 +1,21 @@
+{
+  "name": "NestJSEvents",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "nestjs_events_nestjs",
+  "workspaceFolder": "/nestjs_events",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "rbbit.typescript-hero",
+    "gruntfuggly.todo-tree"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "typescript.preferences.importModuleSpecifier": "relative"
+  },
+  "forwardPorts": [3333, 9229, 7001],
+  "postStartCommand": "yarn"
+}
